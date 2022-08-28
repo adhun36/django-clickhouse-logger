@@ -64,7 +64,8 @@ To test you can change filter `require_debug_false` to `require_debug_true` for 
 For visual interface to clickhouse table `clickhouse_logger.records` i recommend using a [Dbeaver](https://dbeaver.io/).
 
 
-## Little advertisement
-[WorkHours.Space](https://workhours.space/) - Smart working hours accounting system *.
-Time tracker. Automatic payroll calculation. Uploading reports to PDF and XLS. Modern adaptive interface.
-###### * This is my free service for developers.
+## P.S.
+Try my free service for developers [Workhours.space](https://workhours.space/). 
+It is time tracker with simple interface, powerful functionality such as automatic payroll calculation, 
+telegram bot timer, easy web2 and web3 auth, and more. Enjoy. 
+

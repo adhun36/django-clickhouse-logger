@@ -7,12 +7,12 @@ import shortuuid
 from clickhouse_driver import Client as ClickHouseClient
 from clickhouse_driver import connect
 from clickhouse_driver.dbapi.extras import DictCursor
-from clickhouse_logger.settings import CLICKHOUSE_LOGGER_HOST
-from clickhouse_logger.settings import CLICKHOUSE_LOGGER_PASSWORD
-from clickhouse_logger.settings import CLICKHOUSE_LOGGER_PORT
-from clickhouse_logger.settings import CLICKHOUSE_LOGGER_REQUEST_EXTRA
-from clickhouse_logger.settings import CLICKHOUSE_LOGGER_TTL_DAY
-from clickhouse_logger.settings import CLICKHOUSE_LOGGER_USER
+from django_clickhouse_logger.settings import DJANGO_CLICKHOUSE_LOGGER_HOST
+from django_clickhouse_logger.settings import DJANGO_CLICKHOUSE_LOGGER_PORT
+from django_clickhouse_logger.settings import DJANGO_CLICKHOUSE_LOGGER_USER
+from django_clickhouse_logger.settings import DJANGO_CLICKHOUSE_LOGGER_PASSWORD
+from django_clickhouse_logger.settings import DJANGO_CLICKHOUSE_LOGGER_REQUEST_EXTRA
+from django_clickhouse_logger.settings import DJANGO_CLICKHOUSE_LOGGER_TTL_DAY
 
 
 def format_exception(ei):
@@ -28,8 +28,8 @@ def format_exception(ei):
 
 def proxy(record: logging.LogRecord = "") -> None:
 
-    assert CLICKHOUSE_LOGGER_HOST, "Please specify CLICKHOUSE_HOST in your settings.py file"
-    clickhouse_connect = connect(host=CLICKHOUSE_LOGGER_HOST, port=CLICKHOUSE_LOGGER_PORT, user=CLICKHOUSE_LOGGER_USER, password=CLICKHOUSE_LOGGER_PASSWORD)
+    assert DJANGO_CLICKHOUSE_LOGGER_HOST, "Please specify DJANGO_CLICKHOUSE_LOGGER_HOST in your settings.py file"
+    clickhouse_connect = connect(host=DJANGO_CLICKHOUSE_LOGGER_HOST, port=DJANGO_CLICKHOUSE_LOGGER_PORT, user=DJANGO_CLICKHOUSE_LOGGER_USER, password=DJANGO_CLICKHOUSE_LOGGER_PASSWORD)
 
     request = record.request
     exc_info = getattr(record, 'exc_info', "")
@@ -42,7 +42,7 @@ def proxy(record: logging.LogRecord = "") -> None:
     clickhouse_dict["asctime"] = datetime.datetime.now()
     clickhouse_dict["user"] = "%s" % request.user
     clickhouse_dict["user_id"] = request.user.id
-    clickhouse_dict["request_extra"] =  "%s" % getattr(request, CLICKHOUSE_LOGGER_REQUEST_EXTRA, "")
+    clickhouse_dict["request_extra"] =  "%s" % getattr(request, DJANGO_CLICKHOUSE_LOGGER_REQUEST_EXTRA, "")
     clickhouse_dict["site"] = f"{request.get_host()}:{request.get_port()}"
     clickhouse_dict["scheme"] = "%s" % request.scheme 
     clickhouse_dict["body"] = "%s" % request.body 
@@ -76,22 +76,22 @@ def proxy(record: logging.LogRecord = "") -> None:
 
     with clickhouse_connect.cursor(cursor_factory=DictCursor) as cursor:
         cursor.execute(
-            """INSERT INTO clickhouse_logger.records (*)  VALUES""",
+            """INSERT INTO django_clickhouse_logger.records (*)  VALUES""",
             [clickhouse_dict],
         )
 
 
 def create_clickhouse_tables() -> None:
-    # python manage.py shell --command="import clickhouse_logger; clickhouse_logger.proxy.clickhouse.create_clickhouse_tables()"
+    # python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.proxy.clickhouse.create_clickhouse_tables()"
 
-    assert CLICKHOUSE_LOGGER_HOST, "Please specify CLICKHOUSE_HOST in your settings.py file"
-    assert isinstance(CLICKHOUSE_LOGGER_TTL_DAY, int), "CLICKHOUSE_TTL_DAY must be positive integer"
+    assert DJANGO_CLICKHOUSE_LOGGER_HOST, "Please specify DJANGO_CLICKHOUSE_LOGGER_HOST in your settings.py file"
+    assert isinstance(DJANGO_CLICKHOUSE_LOGGER_TTL_DAY, int), "DJANGO_CLICKHOUSE_LOGGER_TTL_DAY must be positive integer"
 
-    clickhouse_client = ClickHouseClient(host=CLICKHOUSE_LOGGER_HOST, port=CLICKHOUSE_LOGGER_PORT, user=CLICKHOUSE_LOGGER_USER, password=CLICKHOUSE_LOGGER_PASSWORD)
-    clickhouse_client.execute('CREATE DATABASE IF NOT EXISTS clickhouse_logger')
-    clickhouse_client.execute('DROP TABLE IF EXISTS clickhouse_logger.records')
+    clickhouse_client = ClickHouseClient(host=DJANGO_CLICKHOUSE_LOGGER_HOST, port=DJANGO_CLICKHOUSE_LOGGER_PORT, user=DJANGO_CLICKHOUSE_LOGGER_USER, password=DJANGO_CLICKHOUSE_LOGGER_PASSWORD)
+    clickhouse_client.execute('CREATE DATABASE IF NOT EXISTS django_clickhouse_logger')
+    clickhouse_client.execute('DROP TABLE IF EXISTS django_clickhouse_logger.records')
     clickhouse_client.execute(f'''
-    CREATE TABLE clickhouse_logger.records (
+    CREATE TABLE django_clickhouse_logger.records (
     `uuid` String,
     `asctime` DateTime,     
     `user` Nullable(String),
@@ -131,6 +131,6 @@ def create_clickhouse_tables() -> None:
     ENGINE = MergeTree() 
     PARTITION BY toDate(asctime)
     ORDER BY (asctime) 
-    TTL asctime + INTERVAL {CLICKHOUSE_LOGGER_TTL_DAY} DAY
+    TTL asctime + INTERVAL {DJANGO_CLICKHOUSE_LOGGER_TTL_DAY} DAY
     SETTINGS min_bytes_for_wide_part = 0
     ''')

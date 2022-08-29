@@ -1,7 +1,7 @@
 import logging
 from logging import StreamHandler
 
-from clickhouse_logger.proxy import clickhouse
+from django_clickhouse_logger.proxy import clickhouse
 from django.core.handlers.wsgi import WSGIRequest
 
 

@@ -15,26 +15,26 @@ pip install django-clickhouse-logger
 
 Add the clickhouse logger to INSTALLED_APPS:
 ```python
-INSTALLED_APPS = INSTALLED_APPS + ("clickhouse_logger",)
+INSTALLED_APPS = INSTALLED_APPS + ("django_clickhouse_logger",)
 ```
 
 Set clickhouse logger environment variables in a settings.py:
 ```python
-CLICKHOUSE_LOGGER_HOST = 127.0.0.1 
-CLICKHOUSE_LOGGER_PORT = 9000
-CLICKHOUSE_LOGGER_USER = "default"
-CLICKHOUSE_LOGGER_PASSWORD = ""
-CLICKHOUSE_LOGGER_TTL_DAY = 1 # Log rotation (in days).
-CLICKHOUSE_LOGGER_REQUEST_EXTRA = 'session' # Means request.session. 
+DJANGO_CLICKHOUSE_LOGGER_HOST = "127.0.0.1" 
+DJANGO_CLICKHOUSE_LOGGER_PORT = 9000
+DJANGO_CLICKHOUSE_LOGGER_USER = "default"
+DJANGO_CLICKHOUSE_LOGGER_PASSWORD = ""
+DJANGO_CLICKHOUSE_LOGGER_TTL_DAY = 1 # Log rotation (in days).
+DJANGO_CLICKHOUSE_LOGGER_REQUEST_EXTRA = "session" # Means request.session. 
 # Extra attribute of django.core.handlers.wsgi.WSGIRequest object for logging. 
 # You can define own attribute in your custom middleware. 
 ```
 
 Run the clickhouse database creation script:
 ```sh
->>> python manage.py shell --command="import clickhouse_logger; clickhouse_logger.proxy.clickhouse.create_clickhouse_tables()"
+>>> python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.proxy.clickhouse.create_clickhouse_tables()"
 ```
-This script will create the database `clickhouse_logger` with the table `records` for django errors store.
+This script will create the database `django_clickhouse_logger` with the table `records` for django errors store.
 
 
 Add the clickhouse logger to your logger configuration in a settings.py:
@@ -51,17 +51,17 @@ LOGGING = {
     },
     "handlers": {
         "console": {"level": "INFO", "filters": ["require_debug_true"], "class": "logging.StreamHandler", "formatter": "console"},
-        "clickhouse_logger_handler": {"level": "ERROR", "filters": ["require_debug_false"], "class": "clickhouse_logger.handlers.ClickhouseLoggerHandler"},              
+        "django_clickhouse_logger": {"level": "ERROR", "filters": ["require_debug_false"], "class": "django_clickhouse_logger.handlers.ClickhouseLoggerHandler"},              
     }, 
     "loggers": {
         "django": {"handlers": ["console"], "level": "INFO",},
-        "django.request": {"handlers": ["clickhouse_logger_handler"], "level": "ERROR", 'propagate': False},
+        "django.request": {"handlers": ["django_clickhouse_logger"], "level": "ERROR", 'propagate': False},
     },
 }
 ```
 
-If you want to test just change filter `require_debug_false` to `require_debug_true` for `clickhouse_logger_handler` and raise error in any django view.
-For visual interface to the clickhouse table `clickhouse_logger.records` i recommend using [Dbeaver](https://dbeaver.io/).
+If you want to test just change filter `require_debug_false` to `require_debug_true` for `django_clickhouse_logger` handler and raise error in any django view.
+For visual interface to the clickhouse table `django_clickhouse_logger.records` i recommend using [Dbeaver](https://dbeaver.io/).
 
 
 ## P.S.

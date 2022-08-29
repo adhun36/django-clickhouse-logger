@@ -2,6 +2,7 @@ import datetime
 import io
 import logging
 import traceback
+import shortuuid
 
 from clickhouse_driver import Client as ClickHouseClient
 from clickhouse_driver import connect
@@ -37,6 +38,7 @@ def proxy(record: logging.LogRecord = "") -> None:
         exc_info = format_exception(exc_info)   
 
     clickhouse_dict = {}
+    clickhouse_dict["uuid"] = shortuuid.uuid()
     clickhouse_dict["asctime"] = datetime.datetime.now()
     clickhouse_dict["user"] = "%s" % request.user
     clickhouse_dict["user_id"] = request.user.id
@@ -90,6 +92,7 @@ def create_clickhouse_tables() -> None:
     clickhouse_client.execute('DROP TABLE IF EXISTS clickhouse_logger.records')
     clickhouse_client.execute(f'''
     CREATE TABLE clickhouse_logger.records (
+    `uuid` String,
     `asctime` DateTime,     
     `user` Nullable(String),
     `user_id` Nullable(UInt16),

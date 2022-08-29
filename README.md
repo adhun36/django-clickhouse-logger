@@ -1,6 +1,6 @@
 # django-clickhouse-logger
 
-Logging django errors to the clickhouse database.
+Logging django errors to the clickhouse database with daily rotation.
 
 ```no-highlight
 https://github.com/Sobolev5/django-clickhouse-logger
@@ -13,7 +13,7 @@ To install run:
 pip install django-clickhouse-logger
 ```
 
-Add the clickhouse logger to the INSTALLED_APPS:
+Add the clickhouse logger to INSTALLED_APPS:
 ```python
 INSTALLED_APPS = INSTALLED_APPS + ("clickhouse_logger",)
 ```
@@ -30,9 +30,9 @@ CLICKHOUSE_LOGGER_REQUEST_EXTRA = 'session' # Means request.session.
 # You can define own attribute in your custom middleware. 
 ```
 
-Run the clickhouse database creation script on a server:
+Run the clickhouse database creation script:
 ```sh
-python manage.py shell --command="import clickhouse_logger; clickhouse_logger.proxy.clickhouse.create_clickhouse_tables()"
+>>> python manage.py shell --command="import clickhouse_logger; clickhouse_logger.proxy.clickhouse.create_clickhouse_tables()"
 ```
 This script will create the database `clickhouse_logger` with the table `records` for django errors store.
 
@@ -60,12 +60,12 @@ LOGGING = {
 }
 ```
 
-To test you can change filter `require_debug_false` to `require_debug_true` for `clickhouse_logger_handler` and raise a error in any django view.
-For visual interface to clickhouse table `clickhouse_logger.records` i recommend using a [Dbeaver](https://dbeaver.io/).
+If you want to test just change filter `require_debug_false` to `require_debug_true` for `clickhouse_logger_handler` and raise error in any django view.
+For visual interface to the clickhouse table `clickhouse_logger.records` i recommend using [Dbeaver](https://dbeaver.io/).
 
 
 ## P.S.
 Try my free service for developers [Workhours.space](https://workhours.space/). 
-It is time tracker with simple interface, powerful functionality such as automatic payroll calculation, 
+It's time tracker with simple interface, powerful functionality such as automatic payroll calculation, 
 telegram bot timer, easy web2 and web3 auth, and more. Enjoy. 
 

@@ -63,7 +63,7 @@ LOGGING = {
 If you want to test just change filter `require_debug_false` to `require_debug_true` for `django_clickhouse_logger` handler and raise error in any django view.
 For visual interface to the clickhouse table `django_clickhouse_logger.records` i recommend using [Dbeaver](https://dbeaver.io/).
 
-Uf you want flush table just run:
+If you want to truncate table `django_clickhouse_logger.records` just run:
 ```sh
 >>> python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.proxy.clickhouse.truncate_clickhouse_table()"
 ```

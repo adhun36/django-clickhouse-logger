@@ -32,7 +32,7 @@ DJANGO_CLICKHOUSE_LOGGER_REQUEST_EXTRA = "session" # Means request.session.
 
 Run the clickhouse database creation script:
 ```sh
->>> python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.proxy.clickhouse.create_clickhouse_tables()"
+>>> python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.proxy.clickhouse.create_clickhouse_table()"
 ```
 This script will create the database `django_clickhouse_logger` with the table `records` for django errors store.
 
@@ -63,6 +63,10 @@ LOGGING = {
 If you want to test just change filter `require_debug_false` to `require_debug_true` for `django_clickhouse_logger` handler and raise error in any django view.
 For visual interface to the clickhouse table `django_clickhouse_logger.records` i recommend using [Dbeaver](https://dbeaver.io/).
 
+Uf you want flush table just run:
+```sh
+>>> python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.proxy.clickhouse.truncate_clickhouse_table()"
+```
 
 ## P.S.
 Try my free service for developers [Workhours.space](https://workhours.space/). 

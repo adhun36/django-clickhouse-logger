@@ -81,8 +81,8 @@ def proxy(record: logging.LogRecord = "") -> None:
         )
 
 
-def create_clickhouse_tables() -> None:
-    # python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.proxy.clickhouse.create_clickhouse_tables()"
+def create_clickhouse_table() -> None:
+    # python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.proxy.clickhouse.create_clickhouse_table()"
 
     assert DJANGO_CLICKHOUSE_LOGGER_HOST, "Please specify DJANGO_CLICKHOUSE_LOGGER_HOST in your settings.py file"
     assert isinstance(DJANGO_CLICKHOUSE_LOGGER_TTL_DAY, int), "DJANGO_CLICKHOUSE_LOGGER_TTL_DAY must be positive integer"
@@ -135,3 +135,14 @@ def create_clickhouse_tables() -> None:
     SETTINGS min_bytes_for_wide_part = 0
     ''')
     print(f'success create table django_clickhouse_logger.records; log rotation {DJANGO_CLICKHOUSE_LOGGER_TTL_DAY} day')
+
+
+def truncate_clickhouse_table() -> None:
+    # python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.proxy.clickhouse.truncate_clickhouse_table()"
+    
+    assert DJANGO_CLICKHOUSE_LOGGER_HOST, "Please specify DJANGO_CLICKHOUSE_LOGGER_HOST in your settings.py file"
+    assert isinstance(DJANGO_CLICKHOUSE_LOGGER_TTL_DAY, int), "DJANGO_CLICKHOUSE_LOGGER_TTL_DAY must be positive integer"
+
+    clickhouse_client = ClickHouseClient(host=DJANGO_CLICKHOUSE_LOGGER_HOST, port=DJANGO_CLICKHOUSE_LOGGER_PORT, user=DJANGO_CLICKHOUSE_LOGGER_USER, password=DJANGO_CLICKHOUSE_LOGGER_PASSWORD)
+    clickhouse_client.execute('TRUNCATE TABLE IF EXISTS django_clickhouse_logger.records')
+    print(f'success truncate table django_clickhouse_logger.records')

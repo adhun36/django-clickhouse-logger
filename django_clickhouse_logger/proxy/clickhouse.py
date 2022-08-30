@@ -40,6 +40,7 @@ def proxy(record: logging.LogRecord = "") -> None:
     clickhouse_dict = {}
     clickhouse_dict["uuid"] = shortuuid.uuid()
     clickhouse_dict["asctime"] = datetime.datetime.now()
+    clickhouse_dict["exc_info"] = exc_info 
     clickhouse_dict["user"] = "%s" % request.user
     clickhouse_dict["user_id"] = request.user.id
     clickhouse_dict["request_extra"] =  "%s" % getattr(request, DJANGO_CLICKHOUSE_LOGGER_REQUEST_EXTRA, "")
@@ -57,7 +58,6 @@ def proxy(record: logging.LogRecord = "") -> None:
     clickhouse_dict["funcName"] = str(getattr(record, 'funcName', ""))
     clickhouse_dict["lineno"] = getattr(record, 'lineno', 0)
     clickhouse_dict["message"] = record.getMessage() 
-    clickhouse_dict["exc_info"] = exc_info 
     clickhouse_dict["exc_text"] = str(getattr(record, 'exc_text', ""))   
     clickhouse_dict["created"] = getattr(record, 'lineno', 0)
     clickhouse_dict["filename"] = str(getattr(record, 'filename', ""))  
@@ -94,6 +94,7 @@ def create_clickhouse_tables() -> None:
     CREATE TABLE django_clickhouse_logger.records (
     `uuid` String,
     `asctime` DateTime,     
+    `exc_info` Nullable(String),
     `user` Nullable(String),
     `user_id` Nullable(UInt16),
     `request_extra` Nullable(String),
@@ -111,7 +112,6 @@ def create_clickhouse_tables() -> None:
     `funcName` Nullable(String),   
     `lineno` Nullable(Int32),  
     `message` Nullable(String),  
-    `exc_info` Nullable(String),
     `exc_text` Nullable(String),      
     `created` Nullable(Float64),
     `filename` Nullable(String),  
@@ -134,3 +134,4 @@ def create_clickhouse_tables() -> None:
     TTL asctime + INTERVAL {DJANGO_CLICKHOUSE_LOGGER_TTL_DAY} DAY
     SETTINGS min_bytes_for_wide_part = 0
     ''')
+    print(f'success create table django_clickhouse_logger.records; log rotation {DJANGO_CLICKHOUSE_LOGGER_TTL_DAY} day')

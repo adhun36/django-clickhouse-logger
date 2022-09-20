@@ -15,7 +15,7 @@ from django_clickhouse_logger.settings import DJANGO_CLICKHOUSE_LOGGER_REQUEST_E
 from django_clickhouse_logger.settings import DJANGO_CLICKHOUSE_LOGGER_TTL_DAY
 
 
-def format_exception(ei):
+def format_exception(ei) -> str:
     sio = io.StringIO()
     tb = ei[2]
     traceback.print_exception(ei[0], ei[1], tb, None, sio)
@@ -41,18 +41,18 @@ def proxy(record: logging.LogRecord = "") -> None:
     clickhouse_dict["uuid"] = shortuuid.uuid()
     clickhouse_dict["asctime"] = datetime.datetime.now()
     clickhouse_dict["exc_info"] = exc_info 
-    clickhouse_dict["exc_hash"] = hashlib.md5(exc_info).hexdigest()
-    clickhouse_dict["user"] = "%s" % request.user
+    clickhouse_dict["exc_hash"] = hashlib.md5(exc_info.encode()).hexdigest()
+    clickhouse_dict["user"] = str(request.user)
     clickhouse_dict["user_id"] = request.user.id
-    clickhouse_dict["request_extra"] =  "%s" % getattr(request, DJANGO_CLICKHOUSE_LOGGER_REQUEST_EXTRA, "")
+    clickhouse_dict["request_extra"] = str(getattr(request, DJANGO_CLICKHOUSE_LOGGER_REQUEST_EXTRA, ""))
     clickhouse_dict["site"] = f"{request.get_host()}:{request.get_port()}"
-    clickhouse_dict["scheme"] = "%s" % request.scheme 
-    clickhouse_dict["body"] = "%s" % request.body 
-    clickhouse_dict["path"] = "%s" % request.path 
-    clickhouse_dict["method"] = "%s" % request.method  
-    clickhouse_dict["GET"] = "%s" % request.GET  
-    clickhouse_dict["POST"] = "%s" % request.POST  
-    clickhouse_dict["headers"] = "%s" % request.headers 
+    clickhouse_dict["scheme"] = str(request.scheme) 
+    clickhouse_dict["body"] = str(request.body) 
+    clickhouse_dict["path"] = str(request.path) 
+    clickhouse_dict["method"] = str(request.method)  
+    clickhouse_dict["GET"] = str(request.GET)  
+    clickhouse_dict["POST"] = str(request.POST)  
+    clickhouse_dict["headers"] = str(request.headers) 
     clickhouse_dict["args"] = str(request.resolver_match.args)
     clickhouse_dict["kwargs"] = str(request.resolver_match.kwargs)  
     clickhouse_dict["pathname"] = str(getattr(record, 'pathname', ""))

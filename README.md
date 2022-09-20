@@ -68,8 +68,6 @@ If you want to truncate table `django_clickhouse_logger.records` just run:
 >>> python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.proxy.clickhouse.truncate_clickhouse_table()"
 ```
 
-## P.S.
-Try my free service for developers [Workhours.space](https://workhours.space/). 
-It's time tracker with simple interface, powerful functionality such as automatic payroll calculation, 
-telegram bot timer, easy web2 and web3 auth, and more. Enjoy. 
+# Try my free time tracker
+My free time tracker for developers [Workhours.space](https://workhours.space/). 
 

@@ -3,7 +3,7 @@ import io
 import logging
 import traceback
 import shortuuid
-
+import hashlib
 from clickhouse_driver import Client as ClickHouseClient
 from clickhouse_driver import connect
 from clickhouse_driver.dbapi.extras import DictCursor
@@ -41,6 +41,7 @@ def proxy(record: logging.LogRecord = "") -> None:
     clickhouse_dict["uuid"] = shortuuid.uuid()
     clickhouse_dict["asctime"] = datetime.datetime.now()
     clickhouse_dict["exc_info"] = exc_info 
+    clickhouse_dict["exc_hash"] = hashlib.md5(exc_info).hexdigest()
     clickhouse_dict["user"] = "%s" % request.user
     clickhouse_dict["user_id"] = request.user.id
     clickhouse_dict["request_extra"] =  "%s" % getattr(request, DJANGO_CLICKHOUSE_LOGGER_REQUEST_EXTRA, "")
@@ -95,6 +96,7 @@ def create_clickhouse_table() -> None:
     `uuid` String,
     `asctime` DateTime,     
     `exc_info` Nullable(String),
+    `exc_hash` Nullable(String),
     `user` Nullable(String),
     `user_id` Nullable(UInt16),
     `request_extra` Nullable(String),

@@ -149,3 +149,4 @@ def truncate_clickhouse_table() -> None:
     clickhouse_client.execute('TRUNCATE TABLE IF EXISTS django_clickhouse_logger.records')
     print(f'success truncate table django_clickhouse_logger.records')
 
+

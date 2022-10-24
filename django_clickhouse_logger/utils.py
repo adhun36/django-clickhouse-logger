@@ -65,4 +65,3 @@ def capture_exception(error: BaseException, message: str = "") -> None:
             [clickhouse_dict],
         )
 
-

@@ -32,7 +32,7 @@ DJANGO_CLICKHOUSE_LOGGER_REQUEST_EXTRA = "session" # Means request.session.
 
 Run the clickhouse database creation script:
 ```sh
->>> python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.proxy.clickhouse.create_clickhouse_table()"
+>>> python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.clickhouse.create_clickhouse_table()"
 ```
 This script will create the database `django_clickhouse_logger` with the table `records` for django errors store.
 
@@ -65,7 +65,24 @@ For visual interface to the clickhouse table `django_clickhouse_logger.records` 
 
 If you want to truncate table `django_clickhouse_logger.records` just run:
 ```sh
->>> python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.proxy.clickhouse.truncate_clickhouse_table()"
+>>> python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.clickhouse.truncate_clickhouse_table()"
+```
+
+# Capture exception
+To catch exceptions manually:
+```python
+
+from django_clickhouse_logger import capture_exception   
+
+try:
+    print(undefined_variable)
+except Exception as e:
+    capture_exception(e)
+
+try:
+    print(undefined_variable)
+except Exception as e:
+    capture_exception(e, "add some text")
 ```
 
 # Try my free time tracker

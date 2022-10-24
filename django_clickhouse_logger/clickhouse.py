@@ -83,7 +83,7 @@ def proxy(record: logging.LogRecord = "") -> None:
 
 
 def create_clickhouse_table() -> None:
-    # python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.proxy.clickhouse.create_clickhouse_table()"
+    # python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.clickhouse.create_clickhouse_table()"
 
     assert DJANGO_CLICKHOUSE_LOGGER_HOST, "Please specify DJANGO_CLICKHOUSE_LOGGER_HOST in your settings.py file"
     assert isinstance(DJANGO_CLICKHOUSE_LOGGER_TTL_DAY, int), "DJANGO_CLICKHOUSE_LOGGER_TTL_DAY must be positive integer"
@@ -140,7 +140,7 @@ def create_clickhouse_table() -> None:
 
 
 def truncate_clickhouse_table() -> None:
-    # python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.proxy.clickhouse.truncate_clickhouse_table()"
+    # python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.clickhouse.truncate_clickhouse_table()"
     
     assert DJANGO_CLICKHOUSE_LOGGER_HOST, "Please specify DJANGO_CLICKHOUSE_LOGGER_HOST in your settings.py file"
     assert isinstance(DJANGO_CLICKHOUSE_LOGGER_TTL_DAY, int), "DJANGO_CLICKHOUSE_LOGGER_TTL_DAY must be positive integer"

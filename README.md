@@ -7,6 +7,7 @@ https://github.com/Sobolev5/django-clickhouse-logger
 ```
 
 ![](https://github.com/Sobolev5/django-clickhouse-logger/blob/master/screenshots/screenshot.png)   
+> screenshot from dbeaver
 
 # How to use it
 

@@ -148,3 +148,4 @@ def truncate_clickhouse_table() -> None:
     clickhouse_client = ClickHouseClient(host=DJANGO_CLICKHOUSE_LOGGER_HOST, port=DJANGO_CLICKHOUSE_LOGGER_PORT, user=DJANGO_CLICKHOUSE_LOGGER_USER, password=DJANGO_CLICKHOUSE_LOGGER_PASSWORD)
     clickhouse_client.execute('TRUNCATE TABLE IF EXISTS django_clickhouse_logger.records')
     print(f'success truncate table django_clickhouse_logger.records')
+

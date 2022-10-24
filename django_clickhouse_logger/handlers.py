@@ -10,3 +10,5 @@ class ClickhouseLoggerHandler(StreamHandler):
     def emit(self, record) -> None:
         if isinstance(record, logging.LogRecord) and getattr(record, 'request', False) and isinstance(record.request, WSGIRequest):
             clickhouse.proxy(record)
+
+

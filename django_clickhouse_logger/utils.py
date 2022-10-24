@@ -64,3 +64,5 @@ def capture_exception(error: BaseException, message: str = "") -> None:
             """INSERT INTO django_clickhouse_logger.records (*)  VALUES""",
             [clickhouse_dict],
         )
+
+

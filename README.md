@@ -6,6 +6,8 @@ Logging django errors to the clickhouse database with daily rotation.
 https://github.com/Sobolev5/django-clickhouse-logger
 ```
 
+![](https://github.com/Sobolev5/django-clickhouse-logger/blob/master/screenshots/screenshot.png)   
+
 # How to use it
 
 To install run:

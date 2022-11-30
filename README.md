@@ -93,6 +93,9 @@ try:
 except Exception as e:
     capture_exception(e, "add some text here")
 ```
+**Note:** You can integrate `capture_exception` function in any python project.
+Django is not necessary in this case.
+
 
 # Time tracker for developers
 Use [Workhours.space](https://workhours.space/) for your working time tracking. It is free.

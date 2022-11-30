@@ -12,8 +12,9 @@ https://github.com/Sobolev5/django-clickhouse-logger
 # How to use it
 
 To install run:
-```no-highlight
-pip install django-clickhouse-logger
+```python
+pip install django-clickhouse-logger # stable version
+pip install -U git+https://github.com/Sobolev5/django-clickhouse-logger.git@master # development version
 ```
 
 Add Clickhouse logger to INSTALLED_APPS:
@@ -37,8 +38,7 @@ DJANGO_CLICKHOUSE_LOGGER_REQUEST_EXTRA = "session"
 
 Run Clickhouse tables creation script:
 ```sh
-python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.db.create_logger_table()"  
-python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.db.create_capture_exception_table()"
+python manage.py shell --command="from django_clickhouse_logger.db import *; create_logger_table(); create_capture_exception_table();" 
 ```
 This script will create the database `django_clickhouse_logger` with tables `logger` (Django errors) and `capture_exception` (Captured exceptions).
   
@@ -57,7 +57,7 @@ LOGGING = {
     },
     "handlers": {
         "console": {"level": "INFO", "filters": ["require_debug_true"], "class": "logging.StreamHandler", "formatter": "console"},
-        "django_clickhouse_logger": {"level": "ERROR", "filters": ["require_debug_false"], "class": "django_clickhouse_logger.handlers.ClickhouseLoggerHandler"},              
+        "django_clickhouse_logger": {"level": "ERROR", "filters": ["require_debug_false"], "class": "django_clickhouse_logger.handlers.LoggerHandler"},              
     }, 
     "loggers": {
         "django": {"handlers": ["console"], "level": "INFO",},
@@ -70,11 +70,11 @@ If you want to test just change filter `require_debug_false` to `require_debug_t
 for `django_clickhouse_logger` handler and raise error in any django view.  
 For visual interface to the clickhouse table `django_clickhouse_logger.logger` i recommend to using [Dbeaver](https://dbeaver.io/).
   
-  
+
 If you want to truncate tables `logger` or `capture_exception` just run:
 ```sh
-python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.db.truncate_logger_table()"  
-python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.db.truncate_capture_exception_table()"
+python manage.py shell --command="from django_clickhouse_logger.db import *; truncate_logger_table();"
+python manage.py shell --command="from django_clickhouse_logger.db import *; truncate_capture_exception_table();"
 ```
 
 # Capture exception

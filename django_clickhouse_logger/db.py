@@ -8,7 +8,7 @@ from django_clickhouse_logger.settings import DJANGO_CLICKHOUSE_LOGGER_TTL_DAY
 
 
 def create_logger_table() -> None:
-    # python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.db.create_logger_table()"
+    # python manage.py shell --command="from django_clickhouse_logger.db import create_logger_table; create_logger_table();"
 
     assert DJANGO_CLICKHOUSE_LOGGER_HOST, "Please specify DJANGO_CLICKHOUSE_LOGGER_HOST in your settings.py file"
     assert isinstance(DJANGO_CLICKHOUSE_LOGGER_TTL_DAY, int), "DJANGO_CLICKHOUSE_LOGGER_TTL_DAY must be positive integer"
@@ -65,7 +65,7 @@ def create_logger_table() -> None:
 
 
 def truncate_logger_table() -> None:
-    # python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.db.truncate_logger_table()"
+    # python manage.py shell --command="from django_clickhouse_logger.db import truncate_logger_table; truncate_logger_table();"
     
     assert DJANGO_CLICKHOUSE_LOGGER_HOST, "Please specify DJANGO_CLICKHOUSE_LOGGER_HOST in your settings.py file"
     assert isinstance(DJANGO_CLICKHOUSE_LOGGER_TTL_DAY, int), "DJANGO_CLICKHOUSE_LOGGER_TTL_DAY must be positive integer"
@@ -76,7 +76,7 @@ def truncate_logger_table() -> None:
 
 
 def create_capture_exception_table() -> None:
-    # python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.db.create_capture_exception_table()"
+    # python manage.py shell --command="from django_clickhouse_logger.db import create_capture_exception_table; create_capture_exception_table();"
 
     assert DJANGO_CLICKHOUSE_LOGGER_HOST, "Please specify DJANGO_CLICKHOUSE_LOGGER_HOST in your settings.py file"
     assert isinstance(DJANGO_CLICKHOUSE_LOGGER_TTL_DAY, int), "DJANGO_CLICKHOUSE_LOGGER_TTL_DAY must be positive integer"
@@ -99,11 +99,11 @@ def create_capture_exception_table() -> None:
     TTL asctime + INTERVAL {DJANGO_CLICKHOUSE_LOGGER_TTL_DAY} DAY
     SETTINGS min_bytes_for_wide_part = 0
     """)
-    sprint(f"Success create table django_clickhouse_logger.logger; log rotation {DJANGO_CLICKHOUSE_LOGGER_TTL_DAY} day", c="green", f=1)
+    sprint(f"Success create table django_clickhouse_logger.capture_exception; log rotation {DJANGO_CLICKHOUSE_LOGGER_TTL_DAY} day", c="green", f=1)
 
 
 def truncate_capture_exception_table() -> None:
-    # python manage.py shell --command="import django_clickhouse_logger; django_clickhouse_logger.db.truncate_capture_exception_table()"
+    # python manage.py shell --command="from django_clickhouse_logger.db import truncate_capture_exception_table; truncate_capture_exception_table();"
     
     assert DJANGO_CLICKHOUSE_LOGGER_HOST, "Please specify DJANGO_CLICKHOUSE_LOGGER_HOST in your settings.py file"
     assert isinstance(DJANGO_CLICKHOUSE_LOGGER_TTL_DAY, int), "DJANGO_CLICKHOUSE_LOGGER_TTL_DAY must be positive integer"
@@ -111,3 +111,5 @@ def truncate_capture_exception_table() -> None:
     client = ClickHouseClient(host=DJANGO_CLICKHOUSE_LOGGER_HOST, port=DJANGO_CLICKHOUSE_LOGGER_PORT, user=DJANGO_CLICKHOUSE_LOGGER_USER, password=DJANGO_CLICKHOUSE_LOGGER_PASSWORD)
     client.execute("TRUNCATE TABLE IF EXISTS django_clickhouse_logger.capture_exception")
     sprint(f"Success truncate table django_clickhouse_logger.capture_exception", c="green", f=1)
+
+

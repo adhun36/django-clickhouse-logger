@@ -101,3 +101,4 @@ def capture_exception(error: BaseException, message: str = "") -> None:
             [data],
         )
 
+

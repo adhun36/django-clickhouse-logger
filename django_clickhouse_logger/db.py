@@ -113,3 +113,4 @@ def truncate_capture_exception_table() -> None:
     sprint(f"Success truncate table django_clickhouse_logger.capture_exception", c="green", f=1)
 
 
+

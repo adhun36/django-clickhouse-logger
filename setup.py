@@ -2,19 +2,19 @@ import os
 import sys
 import setuptools
 
-__author__ = 'Sobolev Andrey <email.asobolev@gmail.com>'
-__version__ = '0.2'
+__author__ = "Sobolev Andrey <email.asobolev@gmail.com>"
+__version__ = "0.3"
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name='django-clickhouse-logger',
+    name="django-clickhouse-logger",
     version=__version__,
-    install_requires=['clickhouse-driver==0.2.4', 'shortuuid==1.0.9'],
-    author='Sobolev Andrey',
-    author_email='email.asobolev@gmail.com',
-    description='Logging django errors to the clickhouse database with daily rotation.',
+    install_requires=["clickhouse-driver==0.2.4", "shortuuid==1.0.9", "simple-print>=1.4.9"],
+    author="Sobolev Andrey",
+    author_email="email.asobolev@gmail.com",
+    description="Logging Django errors & capture exceptions to the clickhouse database with daily rotation.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
@@ -24,5 +24,5 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.8',
+    python_requires=">=3.8",
 )

@@ -8,6 +8,8 @@ class LoggerHandler(StreamHandler):
 
     def emit(self, record) -> None:
         if isinstance(record, logging.LogRecord) and getattr(record, "request", False) and isinstance(record.request, WSGIRequest):
-            functions.logger(record)
-
+            try:
+                functions.logger(record)
+            except Exception as e:
+                logging.exception(f"django-clickhouse-logger [ERROR] {e}")     
 

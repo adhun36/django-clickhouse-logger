@@ -97,6 +97,12 @@ except Exception as e:
 Django is not necessary in this case.
 
 
+
+# Integrations
+`django_clickhouse_logger` is default logger for `upserver` project.  
+Go to https://github.com/Sobolev5/upserver for further instructions.
+
+
 # Time tracker for developers
 Use [Workhours.space](https://workhours.space/) for your working time tracking. It is free.
 

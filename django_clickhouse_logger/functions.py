@@ -30,7 +30,7 @@ def logger(record: logging.LogRecord = "") -> None:
     clickhouse_connect = connect(host=DJANGO_CLICKHOUSE_LOGGER_HOST, port=DJANGO_CLICKHOUSE_LOGGER_PORT, user=DJANGO_CLICKHOUSE_LOGGER_USER, password=DJANGO_CLICKHOUSE_LOGGER_PASSWORD)
 
     request = record.request
-    exc_info = getattr(record, "exc_info", "")
+    exc_info = getattr(record, "exc_info", "") or ""
 
     if exc_info:
         exc_info = format_exception(exc_info)   
@@ -51,8 +51,8 @@ def logger(record: logging.LogRecord = "") -> None:
     data["GET"] = str(request.GET)  
     data["POST"] = str(request.POST)  
     data["headers"] = str(request.headers) 
-    data["args"] = str(request.resolver_match.args)
-    data["kwargs"] = str(request.resolver_match.kwargs)  
+    data["args"] = str(getattr(request.resolver_match),"args","")
+    data["kwargs"] = str(getattr(request.resolver_match),"kwargs","")
     data["pathname"] = str(getattr(record, "pathname", ""))
     data["funcName"] = str(getattr(record, "funcName", ""))
     data["lineno"] = getattr(record, "lineno", 0)
